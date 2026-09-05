@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "board.h"
+#include "game.h"
 
 
 char *board[16][16];
@@ -29,7 +30,12 @@ void PrintBoard() {
         printf("%2d ", 16 - i);
         for (int j = 1; j < 15; j++) {
             printf("%s", board[i][j]);
-            printf("─");
+            if(GetPiece(i,j) == 0 && GetPiece(i,j+1) == 0){
+                printf("─");
+            }
+            if(GetPiece(i,j) == 0 && GetPiece(i,j+1) != 0){
+                printf(" ");
+            }
         }
         printf("%s",board[i][15]);
         printf("\n");

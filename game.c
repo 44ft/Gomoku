@@ -2,10 +2,11 @@
 #include "game.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-int GetPiece(int row, int col){
-    if (board[row][col] == "●") return 1;
-    if (board[row][col] == "○") return 2;
+int GetPiece(int row, int col) {
+    if (strcmp(board[row][col], "●") == 0) return 1;
+    if (strcmp(board[row][col], "○") == 0) return 2;
     return 0;
 }
 
@@ -32,7 +33,7 @@ int judge(int row,int col,int player,int dx,int dy){
     return cnt;
 }
 
-int success(int row, int col, int player){
+int ifsuccess(int row, int col, int player){
     int dx[4] = {0,1,1,1};
     int dy[4] = {1,0,1,-1};
     for(int i = 0; i < 4; i++){
@@ -40,3 +41,6 @@ int success(int row, int col, int player){
     }
     return 0;
 }
+
+int ifdraw(){}
+int ifforbid(){}

@@ -44,6 +44,8 @@ int main(){
 void GameStart(){
     InitBoard();
     system("cls");
+    player = 1;
+    int choose_player;
     if(mode == 2){
         printf("执黑请输入1，执白请输入2");
         char input4[100];
@@ -51,8 +53,8 @@ void GameStart(){
         fgets(input4, sizeof(input4), stdin);
         sscanf(input4, "%d", & select4);
         switch(select4){
-            case 1: player = 1; break;
-            case 2: player = 2; break;
+            case 1: choose_player = 1; break;
+            case 2: choose_player = 2; break;
             default:
                 printf("输入非法，按任意键返回");
                 system("pause");
@@ -60,12 +62,13 @@ void GameStart(){
         }
     }
     while(1){
+        int row,col;
+        int num_col;
         system("cls"); 
         if(mode == 1){
             PrintBoard();
-            printf("重新开始请输入again，回到菜单请输入menu");
+            printf("重新开始请输入again，回到菜单请输入menu\n");
             char input5[100];
-            int select5;
             fgets(input5, sizeof(input5), stdin);
             input5[strcspn(input5, "\n")] = 0;
             if (strcmp(input5, "again") == 0){
@@ -74,14 +77,84 @@ void GameStart(){
             if(strcmp(input5, "menu") == 0){
                 return;
             }
+            if (sscanf(input5, "%d %c", &row, &col) == 2) {
+                row = 16 - row;
+                if(row <1 || row > 15){
+                    printf("输入非法，输入任意键以重新输入");
+                    system("pause");
+                    continue;
+                }
+                else{
+                    if(col >= 'a' && col <= 'o'){
+                        num_col = col - 'a' + 1;
+                    }
+                    else if(col >= 'A' && col <= 'O'){
+                        num_col = col - 'a' + 1;
+                    }
+                    else{
+                        printf("输入非法，输入任意键以重新输入");
+                        system("pause");
+                        continue;
+                    }
+                    if(GetPiece(row,num_col) != 0){
+                        printf("输入非法，输入任意键以重新输入");
+                        system("pause");
+                        continue;
+                    }
+                }
+            }
+            else{
+                printf("输入非法，输入任意键以重新输入");
+                system("pause");
+                continue;
+            }
+            PlacePiece(row,num_col,player);
         }
         if(mode == 2){
 
         }
+
+        if(ifsuccess(row,num_col,player) == 1){
+            system("cls");
+            PrintBoard();
+            if(player == 1){
+                printf("游戏结束，黑棋胜利\n");
+                printf("输入任意键返回\n");
+                system("pause");
+                return;
+            }
+            else{
+                printf("游戏结束，白棋胜利\n");
+                printf("输入任意键返回\n");
+                system("pause");
+                return;
+            }
+        }
+        else{
+            if(ifdraw() == 1){
+                printf("游戏结束，平局\n");
+                printf("输入任意键返回\n");
+                system("pause");
+                return;
+            }
+            else{
+                if(forbid == 1){
+                    if(ifforbid() == 1){
+                        printf("禁手判负，游戏结束\n");
+                        printf("输入任意键返回\n");
+                        system("pauser");
+                        return;
+                    }
+                }
+            }
+        }
+        if(player == 1) player = 2;
+        else player = 1;
     }
-
-
 }
+
+
+
 
 void Settings(){
     system("cls");
@@ -101,7 +174,7 @@ void Settings(){
         case 2:
             mode = 2;break;
         default:
-            printf("输入非法，按任意键返回");
+            printf("输入非法，按任意键返回\n");
             system("pause");
             return;
     }
@@ -118,7 +191,7 @@ void Settings(){
         case 2:
             forbid = 2;break;
         default:
-            printf("输入非法，按任意键返回");
+            printf("输入非法，按任意键返回\n");
             system("pause");
     }
 }
@@ -132,8 +205,8 @@ void Help(){
     system("cls");
     printf("该程序为作者2026秋季学期C语言程序设计课程大作业\n");
     printf("注意禁手情况下下禁手会直接判负\n");
-    printf("默认为同屏对战模式，不开启禁手");
+    printf("默认为同屏对战模式，不开启禁手\n");
     printf("\n");
-    printf("按任意键返回");
+    printf("按任意键返回\n");
     system("pause");
 }
